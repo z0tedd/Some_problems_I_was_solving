@@ -1,3 +1,5 @@
+//original: https://habr.com/ru/articles/267855/
+
 struct  TreeNode
 {
     double data; // ключ/данные
