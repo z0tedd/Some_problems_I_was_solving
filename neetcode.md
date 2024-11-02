@@ -1,3 +1,204 @@
+## Kth Largest Integer in a Stream
+
+Design a class to find the kth largest integer in a stream of values, including duplicates. E.g. the 2nd largest from [1, 2, 3, 3] is 3. The stream is not necessarily sorted.
+
+```Python
+class KthLargest:
+
+    def __init__(self, k: int, nums: List[int]):
+        self.minHeap, self.k = nums,k
+        heapq.heapify(self.minHeap)
+        while len(self.minHeap)>k:
+            heapq.heappop(self.minHeap)
+    def add(self, val: int) -> int:
+        heapq.heappush(self.minHeap,val)
+        if len(self.minHeap)>self.k:
+            heapq.heappop(self.minHeap)
+        return self.minHeap[0]
+```
+
+```cpp
+class KthLargest {
+private:
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+    int k;
+
+public:
+    KthLargest(int k, vector<int>& nums) {
+        this->k = k;
+        for (int num : nums) {
+            minHeap.push(num);
+            if (minHeap.size() > k) {
+                minHeap.pop();
+            }
+        }
+    }
+
+    int add(int val) {
+        minHeap.push(val);
+        if (minHeap.size() > k) {
+            minHeap.pop();
+        }
+        return minHeap.top();
+    }
+};
+```
+
+## Given an array nums of unique integers, return all possible subsets of nums
+
+```python
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        subset = []
+
+        def dfs(i):
+            if i >= len(nums):
+                res.append(subset.copy())
+                return
+            subset += [nums[i]]
+            dfs(i+1)
+            subset.pop()
+            dfs(i+1)
+        dfs(0)
+        return res
+```
+
+## You are given the root of a binary tree root. Invert the binary tree and return its root
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+
+        stack = [root]
+
+        while stack:
+            curr = stack.pop(0)
+            if curr:
+                print(curr.left, curr.right)
+            if curr is None:
+
+                stack.append(None)
+                break
+
+            curr.left, curr.right = curr.right, curr.left
+            if curr.right != None:stack.append(curr.right)
+            if curr.left != None:stack.append(curr.left)
+
+        return root
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root: return None
+
+        root.left, root.right = root.right, root.left
+
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+
+        return root
+
+```
+
+## You are given an integer array prices where prices[i] is the price of NeetCoin on the ith day
+
+You may choose a single day to buy one NeetCoin and choose a different day in the future to sell it.
+
+Return the maximum profit you can achieve. You may choose to not make any transactions, in which case the profit would be 0.
+
+```python
+class Solution:
+  def maxProfit(self, prices: List[int]) -> int:
+    res= 0
+    lowest = prices[0]
+
+    for price in prices:
+      lowest = min(lowest,price)
+      res = max(res, price -lowest)
+    return res
+```
+
+## You are given an array of distinct integers nums, sorted in ascending order, and an integer target
+
+Implement a function to search for target within nums. If it exists, then return its index, otherwise, return -1.
+
+```Python
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        l, r = 0, len(nums) - 1
+
+        while l <= r:
+            m = l + ((r - l) // 2)  # (l + r) // 2 can lead to overflow
+            if nums[m] > target:
+                r = m - 1
+            elif nums[m] < target:
+                l = m + 1
+            else:
+                return m
+        return -1
+```
+
+## Given a string s, return true if it is a palindrome, otherwise return false
+
+A palindrome is a string that reads the same forward and backward. It is also case-insensitive and ignores all non-alphanumeric characters.
+
+```python
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        s = s.upper()
+        alpanumeric = "qwertyuiopasdfghjklzxcvbnm1234567890".upper()
+        i = 0
+        j = len(s)-1
+        while j>i:
+            if s[j] not in alpanumeric:
+                j-=1
+                continue
+            if s[i] not in alpanumeric:
+                i+=1
+                continue
+            if s[j]!=s[i]:return False
+            j-=1
+            i+=1
+        return True
+```
+
+## You are given a string s consisting of the following characters: '(', ')', '{', '}', '[' and ']'
+
+The input string s is valid if and only if:
+
+    Every open bracket is closed by the same type of close bracket.
+    Open brackets are closed in the correct order.
+    Every close bracket has a corresponding open bracket of the same type.
+
+Return true if s is a valid string, and false otherwise.`
+
+```python
+class Solution:
+  def isValid(self,s:str)-> bool:
+    Map = {")":"(","}":"{","]":"["}
+    stack = []
+    for i in s:
+      if i not in Map:
+        stack.append(i)
+      if not stack or stack[-1]!=Map[i]:
+        return False
+    return not stack
+```
+
 ## Given an integer array nums, return true if any value appears more than once in the array, otherwise return false
 
 ```
